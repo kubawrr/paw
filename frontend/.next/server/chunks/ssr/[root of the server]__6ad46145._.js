@@ -1,0 +1,1295 @@
+module.exports = {
+
+"[externals]/next/dist/compiled/next-server/app-page.runtime.dev.js [external] (next/dist/compiled/next-server/app-page.runtime.dev.js, cjs)": (function(__turbopack_context__) {
+
+var { g: global, d: __dirname, m: module, e: exports } = __turbopack_context__;
+{
+const mod = __turbopack_context__.x("next/dist/compiled/next-server/app-page.runtime.dev.js", () => require("next/dist/compiled/next-server/app-page.runtime.dev.js"));
+
+module.exports = mod;
+}}),
+"[project]/src/app/services/ProjectService.ts [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "ProjectService": (()=>ProjectService),
+    "userProjectService": (()=>userProjectService)
+});
+class ProjectService {
+    storageKey = 'userProjects';
+    constructor(){
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+    }
+    initializeStorage() {
+        if (!localStorage.getItem(this.storageKey)) {
+            localStorage.setItem(this.storageKey, JSON.stringify([]));
+        }
+    }
+    getAllProjects() {
+        try {
+            if ("TURBOPACK compile-time truthy", 1) return [];
+            "TURBOPACK unreachable";
+        } catch (error) {
+            console.error('Error getting stories:', error);
+            return [];
+        }
+    }
+    createProject(projectData) {
+        try {
+            const stories = this.getAllProjects();
+            const newStory = {
+                ...projectData,
+                id: this.generateId()
+            };
+            stories.push(newStory);
+            localStorage.setItem(this.storageKey, JSON.stringify(stories));
+            return newStory;
+        } catch (error) {
+            console.error('Error creating story:', error);
+            return null;
+        }
+    }
+    updateStory(id, projectData) {
+        try {
+            const stories = this.getAllProjects();
+            const index = stories.findIndex((p)=>p.id === id);
+            if (index === -1) {
+                return null;
+            }
+            const updatedStory = {
+                ...stories[index],
+                ...projectData
+            };
+            stories[index] = updatedStory;
+            localStorage.setItem(this.storageKey, JSON.stringify(stories));
+            return updatedStory;
+        } catch (error) {
+            console.error('Error updating story:', error);
+            return null;
+        }
+    }
+    deleteStory(id) {
+        try {
+            const stories = this.getAllProjects();
+            const filteredStories = stories.filter((p)=>p.id !== id);
+            if (filteredStories.length === stories.length) {
+                return false; // Nothing was deleted
+            }
+            localStorage.setItem(this.storageKey, JSON.stringify(filteredStories));
+            return true;
+        } catch (error) {
+            console.error('Error deleting story:', error);
+            return false;
+        }
+    }
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+    }
+}
+const userProjectService = new ProjectService();
+}}),
+"[project]/src/app/components/ProjectForm.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>ProjectForm)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/ProjectService.ts [app-ssr] (ecmascript)");
+;
+;
+;
+function ProjectForm({ project, onSubmit, onCancel }) {
+    const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        nazwa: '',
+        opis: ''
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (project) {
+            setFormData({
+                nazwa: project.nazwa,
+                opis: project.opis
+            });
+        }
+    }, [
+        project
+    ]);
+    const handleChange = (e)=>{
+        const { name, value } = e.target;
+        setFormData((prev)=>({
+                ...prev,
+                [name]: value
+            }));
+    };
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        if (project) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userProjectService"].updateStory(project.id, formData);
+        } else {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userProjectService"].createProject(formData);
+        }
+        onSubmit();
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-gray-100 p-6 rounded-lg mb-6",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                className: "text-xl font-semibold mb-4",
+                children: project ? 'Edytuj Projekt' : 'Dodaj nowy projekt'
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                lineNumber: 46,
+                columnNumber: 11
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                onSubmit: handleSubmit,
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                htmlFor: "name",
+                                className: "block text-sm font-medium mb-1",
+                                children: "Nazwa"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 52,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                type: "text",
+                                id: "name",
+                                name: "nazwa",
+                                value: formData.nazwa,
+                                onChange: handleChange,
+                                className: "w-full p-2 border rounded",
+                                required: true
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 55,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/ProjectForm.tsx",
+                        lineNumber: 51,
+                        columnNumber: 13
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                htmlFor: "description",
+                                className: "block text-sm font-medium mb-1",
+                                children: "Opis"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 67,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                id: "description",
+                                name: "opis",
+                                value: formData.opis,
+                                onChange: handleChange,
+                                className: "w-full p-2 border rounded",
+                                rows: 3,
+                                required: true
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 70,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/ProjectForm.tsx",
+                        lineNumber: 66,
+                        columnNumber: 13
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex space-x-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "submit",
+                                className: "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
+                                children: "Save"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 83,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
+                                onClick: onCancel,
+                                className: "bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded",
+                                children: "Cancel"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                                lineNumber: 89,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/ProjectForm.tsx",
+                        lineNumber: 82,
+                        columnNumber: 13
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/ProjectForm.tsx",
+                lineNumber: 50,
+                columnNumber: 11
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/ProjectForm.tsx",
+        lineNumber: 45,
+        columnNumber: 9
+    }, this);
+}
+}}),
+"[project]/src/app/components/ProjectCard.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>ProjectCard)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+;
+function ProjectCard({ project, onEdit, onDelete }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `bg-white rounded shadow p-4 `,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-between items-start",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                    className: "font-semibold",
+                    children: project.nazwa
+                }, void 0, false, {
+                    fileName: "[project]/src/app/components/ProjectCard.tsx",
+                    lineNumber: 13,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectCard.tsx",
+                lineNumber: 12,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-sm text-gray-600 mt-2",
+                children: project.opis
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectCard.tsx",
+                lineNumber: 16,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mt-3 text-xs text-gray-500",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: [
+                            "Project: ",
+                            project.nazwa
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/ProjectCard.tsx",
+                        lineNumber: 19,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: [
+                            "Description: ",
+                            project.opis
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/ProjectCard.tsx",
+                        lineNumber: 20,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/ProjectCard.tsx",
+                lineNumber: 18,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-end mt-4 space-x-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: onEdit,
+                        className: "bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs",
+                        children: "Edit"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/ProjectCard.tsx",
+                        lineNumber: 24,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: onDelete,
+                        className: "bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs",
+                        children: "Delete"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/ProjectCard.tsx",
+                        lineNumber: 30,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/ProjectCard.tsx",
+                lineNumber: 23,
+                columnNumber: 9
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/ProjectCard.tsx",
+        lineNumber: 11,
+        columnNumber: 7
+    }, this);
+}
+}}),
+"[project]/src/app/components/ProjectList.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>StoryList)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/ProjectCard.tsx [app-ssr] (ecmascript)");
+;
+;
+function StoryList({ title, projects, onEdit, onDelete }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-gray-100 p-4 rounded-lg",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                className: "text-xl font-semibold mb-4",
+                children: title
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectList.tsx",
+                lineNumber: 14,
+                columnNumber: 7
+            }, this),
+            projects.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-gray-500 italic",
+                children: "No stories"
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectList.tsx",
+                lineNumber: 17,
+                columnNumber: 9
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "space-y-4",
+                children: projects.map((project)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        project: project,
+                        onEdit: ()=>onEdit(project),
+                        onDelete: ()=>onDelete(project.id)
+                    }, project.id, false, {
+                        fileName: "[project]/src/app/components/ProjectList.tsx",
+                        lineNumber: 21,
+                        columnNumber: 13
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/ProjectList.tsx",
+                lineNumber: 19,
+                columnNumber: 9
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/ProjectList.tsx",
+        lineNumber: 13,
+        columnNumber: 5
+    }, this);
+}
+}}),
+"[project]/src/app/services/UserStoryService.ts [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "UserStoryService": (()=>UserStoryService),
+    "userStoryService": (()=>userStoryService)
+});
+class UserStoryService {
+    storageKey = 'userStories';
+    constructor(){
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+    }
+    initializeStorage() {
+        if (!localStorage.getItem(this.storageKey)) {
+            localStorage.setItem(this.storageKey, JSON.stringify([]));
+        }
+    }
+    getAllStories() {
+        try {
+            if ("TURBOPACK compile-time truthy", 1) return [];
+            "TURBOPACK unreachable";
+        } catch (error) {
+            console.error('Error getting stories:', error);
+            return [];
+        }
+    }
+    getStoriesByState(state) {
+        const stories = this.getAllStories();
+        return stories.filter((story)=>story.state === state);
+    }
+    getStoriesByProject(projectId) {
+        const stories = this.getAllStories();
+        return stories.filter((story)=>story.project === projectId);
+    }
+    getStoryById(id) {
+        const stories = this.getAllStories();
+        return stories.find((story)=>story.id === id) || null;
+    }
+    createStory(storyData) {
+        try {
+            const stories = this.getAllStories();
+            const newStory = {
+                ...storyData,
+                id: this.generateId(),
+                dateCreated: new Date().toISOString()
+            };
+            stories.push(newStory);
+            localStorage.setItem(this.storageKey, JSON.stringify(stories));
+            return newStory;
+        } catch (error) {
+            console.error('Error creating story:', error);
+            return null;
+        }
+    }
+    updateStory(id, storyData) {
+        try {
+            const stories = this.getAllStories();
+            const index = stories.findIndex((story)=>story.id === id);
+            if (index === -1) {
+                return null;
+            }
+            const updatedStory = {
+                ...stories[index],
+                ...storyData
+            };
+            stories[index] = updatedStory;
+            localStorage.setItem(this.storageKey, JSON.stringify(stories));
+            return updatedStory;
+        } catch (error) {
+            console.error('Error updating story:', error);
+            return null;
+        }
+    }
+    deleteStory(id) {
+        try {
+            const stories = this.getAllStories();
+            const filteredStories = stories.filter((story)=>story.id !== id);
+            if (filteredStories.length === stories.length) {
+                return false; // Nothing was deleted
+            }
+            localStorage.setItem(this.storageKey, JSON.stringify(filteredStories));
+            return true;
+        } catch (error) {
+            console.error('Error deleting story:', error);
+            return false;
+        }
+    }
+    generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substring(2, 5);
+    }
+}
+const userStoryService = new UserStoryService();
+}}),
+"[project]/src/app/components/StoryForm.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>StoryForm)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/UserStoryService.ts [app-ssr] (ecmascript)");
+;
+;
+;
+function StoryForm({ story, onSubmit, onCancel }) {
+    const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        name: '',
+        description: '',
+        priority: 'medium',
+        project: '',
+        state: 'todo',
+        ownerId: ''
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (story) {
+            setFormData({
+                name: story.name,
+                description: story.description,
+                priority: story.priority,
+                project: story.project,
+                state: story.state,
+                ownerId: story.ownerId
+            });
+        }
+    }, [
+        story
+    ]);
+    const handleChange = (e)=>{
+        const { name, value } = e.target;
+        setFormData((prev)=>({
+                ...prev,
+                [name]: value
+            }));
+    };
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        if (story) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userStoryService"].updateStory(story.id, formData);
+        } else {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userStoryService"].createStory(formData);
+        }
+        onSubmit();
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-gray-100 p-6 rounded-lg mb-6",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                className: "text-xl font-semibold mb-4",
+                children: story ? 'Edit Story' : 'Add New Story'
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/StoryForm.tsx",
+                lineNumber: 56,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                onSubmit: handleSubmit,
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                htmlFor: "name",
+                                className: "block text-sm font-medium mb-1",
+                                children: "Nazwa"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 62,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                type: "text",
+                                id: "name",
+                                name: "name",
+                                value: formData.name,
+                                onChange: handleChange,
+                                className: "w-full p-2 border rounded",
+                                required: true
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 65,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                        lineNumber: 61,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                htmlFor: "description",
+                                className: "block text-sm font-medium mb-1",
+                                children: "Komentarz"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 77,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                id: "description",
+                                name: "description",
+                                value: formData.description,
+                                onChange: handleChange,
+                                className: "w-full p-2 border rounded",
+                                rows: 3,
+                                required: true
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 80,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                        lineNumber: 76,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                        htmlFor: "priority",
+                                        className: "block text-sm font-medium mb-1",
+                                        children: "Priorytet"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 93,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                        id: "priority",
+                                        name: "priority",
+                                        value: formData.priority,
+                                        onChange: handleChange,
+                                        className: "w-full p-2 border rounded",
+                                        required: true,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "low",
+                                                children: "Low"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 104,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "medium",
+                                                children: "Medium"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 105,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "high",
+                                                children: "High"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 106,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 96,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 92,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                        htmlFor: "state",
+                                        className: "block text-sm font-medium mb-1",
+                                        children: "Stan"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 111,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                        id: "state",
+                                        name: "state",
+                                        value: formData.state,
+                                        onChange: handleChange,
+                                        className: "w-full p-2 border rounded",
+                                        required: true,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "todo",
+                                                children: "To Do"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 122,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "doing",
+                                                children: "Doing"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 123,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                value: "done",
+                                                children: "Done"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                                lineNumber: 124,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 114,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 110,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                        lineNumber: 91,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                        htmlFor: "project",
+                                        className: "block text-sm font-medium mb-1",
+                                        children: "Project ID"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 131,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "text",
+                                        id: "project",
+                                        name: "project",
+                                        value: formData.project,
+                                        onChange: handleChange,
+                                        className: "w-full p-2 border rounded",
+                                        required: true
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 134,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 130,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                        htmlFor: "ownerId",
+                                        className: "block text-sm font-medium mb-1",
+                                        children: "Owner ID"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 146,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "text",
+                                        id: "ownerId",
+                                        name: "ownerId",
+                                        value: formData.ownerId,
+                                        onChange: handleChange,
+                                        className: "w-full p-2 border rounded",
+                                        required: true
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                                        lineNumber: 149,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 145,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                        lineNumber: 129,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex space-x-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "submit",
+                                className: "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded",
+                                children: "Save"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 162,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
+                                onClick: onCancel,
+                                className: "bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded",
+                                children: "Cancel"
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/components/StoryForm.tsx",
+                                lineNumber: 168,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryForm.tsx",
+                        lineNumber: 161,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/StoryForm.tsx",
+                lineNumber: 60,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/StoryForm.tsx",
+        lineNumber: 55,
+        columnNumber: 5
+    }, this);
+}
+}}),
+"[project]/src/app/components/StoryCard.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>StoryCard)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+;
+function StoryCard({ story, onEdit, onDelete }) {
+    const priorityClasses = {
+        low: 'border-l-4 border-blue-500',
+        medium: 'border-l-4 border-yellow-500',
+        high: 'border-l-4 border-red-500'
+    };
+    const formatDate = (dateString)=>{
+        return new Date(dateString).toLocaleDateString();
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `bg-white rounded shadow p-4 ${priorityClasses[story.priority]}`,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-between items-start",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                        className: "font-semibold",
+                        children: story.name
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 23,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: `text-xs px-2 py-1 rounded ${story.priority === 'high' ? 'bg-red-100 text-red-800' : story.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'}`,
+                        children: story.priority.charAt(0).toUpperCase() + story.priority.slice(1)
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 24,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/StoryCard.tsx",
+                lineNumber: 22,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-sm text-gray-600 mt-2",
+                children: story.description
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/StoryCard.tsx",
+                lineNumber: 33,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mt-3 text-xs text-gray-500",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: [
+                            "Project: ",
+                            story.project
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 36,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: [
+                            "Owner: ",
+                            story.ownerId
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 37,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: [
+                            "Created: ",
+                            formatDate(story.dateCreated)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 38,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/StoryCard.tsx",
+                lineNumber: 35,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex justify-end mt-4 space-x-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: onEdit,
+                        className: "bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs",
+                        children: "Edit"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 42,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: onDelete,
+                        className: "bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs",
+                        children: "Delete"
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/components/StoryCard.tsx",
+                        lineNumber: 48,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/components/StoryCard.tsx",
+                lineNumber: 41,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/StoryCard.tsx",
+        lineNumber: 21,
+        columnNumber: 5
+    }, this);
+}
+}}),
+"[project]/src/app/components/StoryList.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>StoryList)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/StoryCard.tsx [app-ssr] (ecmascript)");
+;
+;
+function StoryList({ title, stories, onEdit, onDelete }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-gray-100 p-4 rounded-lg",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                className: "text-xl font-semibold mb-4",
+                children: title
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/StoryList.tsx",
+                lineNumber: 14,
+                columnNumber: 7
+            }, this),
+            stories.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-gray-500 italic",
+                children: "No stories"
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/StoryList.tsx",
+                lineNumber: 17,
+                columnNumber: 9
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "space-y-4",
+                children: stories.map((story)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        story: story,
+                        onEdit: ()=>onEdit(story),
+                        onDelete: ()=>onDelete(story.id)
+                    }, story.id, false, {
+                        fileName: "[project]/src/app/components/StoryList.tsx",
+                        lineNumber: 21,
+                        columnNumber: 13
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/app/components/StoryList.tsx",
+                lineNumber: 19,
+                columnNumber: 9
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/components/StoryList.tsx",
+        lineNumber: 13,
+        columnNumber: 5
+    }, this);
+}
+}}),
+"[project]/src/app/page.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, d: __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>Home)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/ProjectService.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectForm$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/ProjectForm.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/ProjectList.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/UserStoryService.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryForm$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/StoryForm.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/StoryList.tsx [app-ssr] (ecmascript)");
+'use client';
+;
+;
+;
+;
+;
+;
+;
+;
+function Home() {
+    const [stories, setStories] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [editingStory, setEditingStory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isFormVisible, setIsFormVisible] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [projects, setProjects] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [editingProject, setEditingProject] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isFormVisiblePr, setIsFormVisiblePr] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        loadStories();
+        loadProjects();
+    }, []);
+    const loadStories = ()=>{
+        const allStories = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userStoryService"].getAllStories();
+        setStories(allStories);
+    };
+    const loadProjects = ()=>{
+        const allProjects = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userProjectService"].getAllProjects();
+        setProjects(allProjects);
+    };
+    const handleCreateProject = ()=>{
+        setEditingProject(null);
+        setIsFormVisiblePr(true);
+    };
+    const handleEditProject = (project)=>{
+        setEditingProject(project);
+        setIsFormVisible(true);
+    };
+    const handleDeleteProject = (id)=>{
+        if (window.confirm('Are you sure you want to delete this story?')) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$ProjectService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userProjectService"].deleteStory(id);
+            loadProjects();
+        }
+    };
+    const handleFormCloseProject = ()=>{
+        setIsFormVisiblePr(false);
+        setEditingProject(null);
+    };
+    const handleFormSubmitProject = ()=>{
+        loadProjects();
+        setIsFormVisiblePr(false);
+        setEditingProject(null);
+    };
+    const handleCreateStory = ()=>{
+        setEditingStory(null);
+        setIsFormVisible(true);
+    };
+    const handleEditStory = (story)=>{
+        setEditingStory(story);
+        setIsFormVisible(true);
+    };
+    const handleDeleteStory = (id)=>{
+        if (window.confirm('Are you sure you want to delete this story?')) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$UserStoryService$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["userStoryService"].deleteStory(id);
+            loadStories();
+        }
+    };
+    const handleFormClose = ()=>{
+        setIsFormVisible(false);
+        setEditingStory(null);
+    };
+    const handleFormSubmit = ()=>{
+        loadStories();
+        setIsFormVisible(false);
+        setEditingStory(null);
+    };
+    const todoStories = stories.filter((story)=>story.state === 'todo');
+    const doingStories = stories.filter((story)=>story.state === 'doing');
+    const doneStories = stories.filter((story)=>story.state === 'done');
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "container mx-auto px-4 py-8",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                className: "text-3xl font-bold mb-6",
+                children: "Historyjki"
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 97,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                onClick: handleCreateStory,
+                className: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6",
+                children: "Dodaj nową historyjkę"
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 99,
+                columnNumber: 7
+            }, this),
+            isFormVisible && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryForm$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                story: editingStory,
+                onSubmit: handleFormSubmit,
+                onCancel: handleFormClose
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 107,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "grid grid-cols-1 md:grid-cols-3 gap-6",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        title: "To Do",
+                        stories: todoStories,
+                        onEdit: handleEditStory,
+                        onDelete: handleDeleteStory
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/page.tsx",
+                        lineNumber: 115,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        title: "Doing",
+                        stories: doingStories,
+                        onEdit: handleEditStory,
+                        onDelete: handleDeleteStory
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/page.tsx",
+                        lineNumber: 122,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StoryList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        title: "Done",
+                        stories: doneStories,
+                        onEdit: handleEditStory,
+                        onDelete: handleDeleteStory
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/page.tsx",
+                        lineNumber: 129,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 114,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                className: "text-3xl font-bold mb-6",
+                children: "Projekty"
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 136,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                onClick: handleCreateProject,
+                className: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-6",
+                children: "Dodaj nowy projekt"
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 138,
+                columnNumber: 7
+            }, this),
+            isFormVisiblePr && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectForm$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                project: editingProject,
+                onSubmit: handleFormSubmitProject,
+                onCancel: handleFormCloseProject
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 145,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$ProjectList$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                title: "Projekty",
+                projects: projects,
+                onEdit: handleEditProject,
+                onDelete: handleDeleteProject
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 151,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/src/app/page.tsx",
+        lineNumber: 96,
+        columnNumber: 5
+    }, this);
+}
+}}),
+"[project]/node_modules/next/dist/server/route-modules/app-page/module.compiled.js [app-ssr] (ecmascript)": (function(__turbopack_context__) {
+
+var { g: global, d: __dirname, m: module, e: exports } = __turbopack_context__;
+{
+"use strict";
+if ("TURBOPACK compile-time falsy", 0) {
+    "TURBOPACK unreachable";
+} else {
+    if ("TURBOPACK compile-time falsy", 0) {
+        "TURBOPACK unreachable";
+    } else {
+        if ("TURBOPACK compile-time truthy", 1) {
+            module.exports = __turbopack_context__.r("[externals]/next/dist/compiled/next-server/app-page.runtime.dev.js [external] (next/dist/compiled/next-server/app-page.runtime.dev.js, cjs)");
+        } else {
+            "TURBOPACK unreachable";
+        }
+    }
+} //# sourceMappingURL=module.compiled.js.map
+}}),
+"[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)": (function(__turbopack_context__) {
+
+var { g: global, d: __dirname, m: module, e: exports } = __turbopack_context__;
+{
+"use strict";
+module.exports = __turbopack_context__.r("[project]/node_modules/next/dist/server/route-modules/app-page/module.compiled.js [app-ssr] (ecmascript)").vendored['react-ssr'].ReactJsxDevRuntime; //# sourceMappingURL=react-jsx-dev-runtime.js.map
+}}),
+"[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)": (function(__turbopack_context__) {
+
+var { g: global, d: __dirname, m: module, e: exports } = __turbopack_context__;
+{
+"use strict";
+module.exports = __turbopack_context__.r("[project]/node_modules/next/dist/server/route-modules/app-page/module.compiled.js [app-ssr] (ecmascript)").vendored['react-ssr'].React; //# sourceMappingURL=react.js.map
+}}),
+
+};
+
+//# sourceMappingURL=%5Broot%20of%20the%20server%5D__6ad46145._.js.map
