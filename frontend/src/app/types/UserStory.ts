@@ -18,7 +18,7 @@ export interface CreateUserStoryDTO {
   priority: Priority;
   project: string;
   state: State;
-  ownerId: string;
+  ownerId?: string; // Optional as it will be set by the API
 }
 
 export interface UpdateUserStoryDTO {
@@ -27,13 +27,13 @@ export interface UpdateUserStoryDTO {
   priority?: Priority;
   project?: string;
   state?: State;
-  ownerId?: string;
 }
 
 export interface Project {
   id: string;
   nazwa: string;
   opis: string;
+  ownerId: string;
 }
 
 export interface ProjectDTO {

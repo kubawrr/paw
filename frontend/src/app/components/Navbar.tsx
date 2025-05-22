@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function Navbar() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const isAuthenticated = !!currentUser;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function Navbar() {
               </Link>
               <div className="relative group">
                 <button className="hover:text-blue-300 flex items-center">
-                  {user?.name || user?.login}
+                  {currentUser?.name || currentUser?.login}
                   <svg 
                     className="w-4 h-4 ml-1" 
                     fill="none" 

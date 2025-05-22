@@ -5,18 +5,18 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginForm() {
-  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { login: authLogin } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!login || !password) {
-      setError('Login i hasło są wymagane');
+    if (!email || !password) {
+      setError('Email i hasło są wymagane');
       return;
     }
     
@@ -24,35 +24,21 @@ export default function LoginForm() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ login, password })
-      });
+      const user = await login(email, password);
       
-      if (!response.ok) {
-        throw new Error('Niepoprawny login lub hasło');
-      }
       
-      const data = await response.json();
-      
-      // Save tokens to localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      
-      // Store user data
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // Update auth context
-      authLogin(data.user);
-      
-      // Redirect to main page
       router.push('/');
       
-    } catch (error) {
-      setError('Niepoprawny login lub hasło');
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        setError('Niepoprawny email lub hasło');
+      } else if (error.code === 'auth/invalid-email') {
+        setError('Niepoprawny format adresu email');
+      } else if (error.code === 'auth/too-many-requests') {
+        setError('Zbyt wiele nieudanych prób logowania. Spróbuj ponownie później');
+      } else {
+        setError("XD" + error.message || 'Wystąpił błąd podczas logowania');
+      }
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);
@@ -71,16 +57,16 @@ export default function LoginForm() {
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="login" className="block text-gray-700 font-medium mb-2">
-            Login
+          <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            Email
           </label>
           <input
-            type="text"
-            id="login"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Wprowadź login"
+            placeholder="Wprowadź adres email"
             required
           />
         </div>

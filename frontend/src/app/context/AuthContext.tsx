@@ -1,97 +1,80 @@
-'use client';
-
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-
-interface User {
-  id: string;
-  login: string;
-  name: string;
-  email: string;
-  role: string;
-}
+// context/AuthContext.tsx
+"use client"
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth'; 
+import { auth } from '../lib/firebase';
+import { AuthApi, User } from '../lib/AuthApi';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (user: User) => void;
-  logout: () => void;
-  checkAuthStatus: () => void;
+  currentUser: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<User>;
+  register: (email: string, password: string, name: string) => Promise<User>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  user: null,
-  isAuthenticated: false,
-  login: () => {},
-  logout: () => {},
-  checkAuthStatus: () => {},
+  currentUser: null,
+  loading: true,
+  login: async () => { throw new Error('Not implemented'); },
+  register: async () => { throw new Error('Not implemented'); },
+  logout: async () => { throw new Error('Not implemented'); }
 });
 
 export const useAuth = () => useContext(AuthContext);
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const login = (userData: User) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setUser(null);
-    setIsAuthenticated(false);
-  };
-
-  const checkAuthStatus = () => {
-    setIsLoading(true);
-    
-    if (typeof window === 'undefined') {
-      setIsLoading(false);
-      return;
-    }
-    
-    const token = localStorage.getItem('token');
-    const userString = localStorage.getItem('user');
-    
-    if (token && userString) {
-      try {
-        const userData = JSON.parse(userString);
-        setUser(userData);
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        logout();
-      }
-    } else {
-      setIsAuthenticated(false);
-    }
-    
-    setIsLoading(false);
-  };
+export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkAuthStatus();
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          const userData = await AuthApi.getUserById(firebaseUser.uid);
+          setCurrentUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          setCurrentUser(null);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+      setLoading(false);
+    });
+
+    return unsubscribe;
   }, []);
 
+  const login = async (email: string, password: string) => {
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+  const userData = await AuthApi.getUserById(credential.user.uid);
+  setCurrentUser(userData);
+  return userData;
+};
+
+
+  const register = async (email: string, password: string, name: string) => {
+    return AuthApi.register(email, password, name);
+  };
+
+ const logout = async () => {
+  await signOut(auth);
+  setCurrentUser(null);
+};
+
+  const value = {
+    currentUser,
+    loading,
+    login,
+    register,
+    logout
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        login,
-        logout,
-        checkAuthStatus,
-      }}
-    >
-      {!isLoading && children}
+    <AuthContext.Provider value={value}>
+      {children}
     </AuthContext.Provider>
   );
-}
+};

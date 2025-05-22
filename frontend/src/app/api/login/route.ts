@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthApi } from '../../lib/AuthApi';
+
 
 const tokenSecret = process.env.TOKEN_SECRET || 'super-tajny-klucz-do-zmiany';
 const tokenExpiration = 60 * 15; // 15 minutes
@@ -40,37 +42,28 @@ let refreshTokens: { [userId: string]: string } = {};
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { login, password } = body;
+    const { email, password } = body;
     
-    if (!login || !password) {
+    if (!email || !password) {
       return NextResponse.json(
-        { message: 'Login i hasło są wymagane' }, 
+        { message: 'Email and password are required' }, 
         { status: 400 }
       );
     }
     
-    const user = users.find(u => u.login === login && u.password === password);
-    
-    if (!user) {
+    try {
+      const user = await AuthApi.login(email, password);
+      
+      return NextResponse.json({
+        user
+      });
+    } catch (error: any) {
       return NextResponse.json(
-        { message: 'Niepoprawny login lub hasło' }, 
+        { message: error.message || 'Invalid email or password' }, 
         { status: 401 }
       );
     }
-    
-    const token = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user.id);
-    
-    refreshTokens[user.id] = refreshToken;
-    
-    const { password: _, ...userWithoutPassword } = user;
-    
-    return NextResponse.json({
-      token,
-      refreshToken,
-      user: userWithoutPassword
-    });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error);
     return NextResponse.json(
       { message: 'Internal server error' }, 
@@ -78,6 +71,7 @@ export async function POST(request: Request) {
     );
   }
 }
+
 
 function generateAccessToken(user: User) {
   const payload = {
